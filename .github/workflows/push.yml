@@ -17,30 +17,22 @@ jobs:
       - name: Clone repo
         uses: actions/checkout@v2
       
-      - name: get openapi
-        run: |  
-              ls -l .
-              wget -O  ci-cd-api-gateway-pipleine/SpatialWorkFlow/openapi.json  http://3.83.110.244/openapi.json
-              sudo echo "$(ci-cd-api-gateway-pipleine/SpatialWorkFlow/openapi.json)"   
-
       - name: Get Yaml from opeapi.json
         uses: mikefarah/yq@master
         with:
-          cmd: yq  -P  ci-cd-api-gateway-pipleine/SpatialWorkFlow/openapi.json>ci-cd-api-gateway-pipleine/SpatialWorkFlow/openapi.yaml
+          cmd: yq  -P  openapi.json>openapi.yaml
 
       - name: Isno Generate Config
         uses: kong/setup-inso@v1
         with:
           inso-version: 3.5.0
       - run: |
-          inso generate config ci-cd-api-gateway-pipleine/SpatialWorkFlow/openapi.yaml -o ci-cd-api-gateway-pipleine/SpatialWorkFlow/fastapi-inso.yaml --verbose
-          sed 's/[$]//g' ci-cd-api-gateway-pipleine/SpatialWorkFlow/fastapi-inso.yaml>ci-cd-api-gateway-pipleine/SpatialWorkFlow/fastapi-deck-import.yaml
-        
+          inso generate openapi.yaml -o fastapi-inso.yaml --verbose
+          
       - name: Setup deck
         uses: kong/setup-deck@v1
         with:
           deck-version: "1.8.0"
       - name: Run deck sync
         run: |
-          ls -l ci-cd-api-gateway-pipleine/SpatialWorkFlow/
-          deck sync -s ci-cd-api-gateway-pipleine/SpatialWorkFlow/fastapi-deck-import.yaml  --kong-addr http://3.83.110.244:8001/
+          deck sync -s fastapi-deck-import.yaml  --kong-addr http://172.17.90.181:8001/
