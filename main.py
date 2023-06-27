@@ -7,10 +7,10 @@ from fastapi.openapi.utils import get_openapi
 from fastapi import FastAPI, File, UploadFile,Depends, Form
 from application import predict, read_imagefile, explain_lime#,read_model
 from application import ShapModelExplainer
-# from application import OcclusionSensitityModelExplainer
+from application import OcclusionSensitityModelExplainer
 from application import get_ClassName
 ShapExplainer = ShapModelExplainer()
-# OcclusionExplainer = OcclusionSensitityModelExplainer()
+OcclusionExplainer = OcclusionSensitityModelExplainer()
 ####################FOR REQUEST BODY####################
 from pydantic import BaseModel
 description = """
@@ -58,7 +58,7 @@ app = FastAPI(
          "name": "Apache 2.0",
          "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
      },
-     servers=[{"url":"http://192.168.42.93"}], 
+     servers=[{"url":"http://192.168.42.139"}], 
    # routes=app.routes,
 )
 
@@ -118,22 +118,22 @@ async def explain_api(file: UploadFile = File(...)):
     explaination = ShapExplainer.explain_shap(image)
     return explaination
 
-# class ClassLabel(BaseModel):
-#     imagetype: str
-# @app.post("/explain_occlusion/image")
-# async def explain_api(file: UploadFile = File(...), base:ClassLabel = Depends()):
-#     extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
-#     input = base.dict()
-#     var = input['imagetype']
-#     classNum = get_ClassName(var)
-#     ####################### FIND CLASS ########################
-#     if not extension:
-#         return "Image must be jpg or png format!"
-#     #label_number = get_ClassName(var)
+class ClassLabel(BaseModel):
+     imagetype: str
+@app.post("/explain_occlusion/image")
+async def explain_api(file: UploadFile = File(...), base:ClassLabel = Depends()):
+     extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
+     input = base.dict()
+     var = input['imagetype']
+     classNum = get_ClassName(var)
+     ####################### FIND CLASS ########################
+     if not extension:
+         return "Image must be jpg or png format!"
+     label_number = get_ClassName(var)
 #     var1 = 4
-#     image = read_imagefile(await file.read())
-#     explaination = OcclusionExplainer.explain_occlusion(image,classNum)
-#     return explaination
+     image = read_imagefile(await file.read())
+     explaination = OcclusionExplainer.explain_occlusion(image,classNum)
+     return explaination
 #print(app.openapi())
 #schema = app.openapi()
 

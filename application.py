@@ -15,9 +15,9 @@ import json
 import shap
 from keras.preprocessing.image import ImageDataGenerator
 ## IMPORT FOR OCCLUSION
-# from tf_explain.callbacks.occlusion_sensitivity import OcclusionSensitivityCallback
-# from tf_explain.callbacks.occlusion_sensitivity import OcclusionSensitivity
-# import cv2
+from tf_explain.callbacks.occlusion_sensitivity import OcclusionSensitivityCallback
+from tf_explain.callbacks.occlusion_sensitivity import OcclusionSensitivity
+import cv2
 
 dir_path = 'dataset-resized/'
 test=ImageDataGenerator(rescale=1/255,
@@ -160,15 +160,16 @@ def explain_lime(image: Image.Image):
     #print(type(fig))
     #print(type(ax1))
     encodedNumpyData = json.dumps(temp_2, cls=NumpyArrayEncoder)
-    plt.figure()
-    plt.title(label='Lime explanation')
+    ###FOR PLOTTING####
+#   plt.figure()
+#    plt.title(label='Lime explanation')
     #ax1.imshow(mark_boundaries(temp_2, mask_2))
-    plt.imshow(temp_2)
-    plt.show()
+#    plt.imshow(temp_2)
+#    plt.show()
     #print(temp_2)
     #print(temp_2*255)
     #ax1.axis('off')
-    return encodedNumpyData
+#   return encodedNumpyData
 
 class ShapModelExplainer(ModelExplainerInterface):
     def explain_image_by_image_name(self, image_name: str):
@@ -204,36 +205,36 @@ class ShapModelExplainer(ModelExplainerInterface):
         explainer = shap.DeepExplainer(model,background_imgs)  # compute shap values
         shap_values = explainer.shap_values(image, check_additivity=False)
         encodedNumpyData = json.dumps(shap_values, cls=NumpyArrayEncoder)
-        self.plot_explanations(shap_values, image)
+#        self.plot_explanations(shap_values, image)
         return encodedNumpyData
     def plot_explanations(self,shap_values, img):
         shap.image_plot(shap_values, img, labels=list(labels.values()), show=False)
         #plt.title('Shap Explanation')
         plt.show()
 
-# class OcclusionSensitityModelExplainer(ModelExplainerInterface):
-#
-#     def explain_occlusion(self,image: Image.Image,label):
-#         image = np.asarray(image.resize((300, 300)))[..., :3]
-#         image = np.expand_dims(image, 0)
-#         image = image / 255.0
-#         print("Explaining with Occlusion Sensitivity")
-#         explained_img_name = 'TESTNAME.png'
-#         explainer = OcclusionSensitivity()
-#         data = (image, label)
-#         grid = explainer.explain(data, model, label, patch_size=15, colormap=cv2.COLORMAP_TURBO)  #
-#         print(grid.shape)
-#         explainer.save(grid, ".", explained_img_name)
+class OcclusionSensitityModelExplainer(ModelExplainerInterface):
+
+     def explain_occlusion(self,image: Image.Image,label):
+         image = np.asarray(image.resize((300, 300)))[..., :3]
+         image = np.expand_dims(image, 0)
+         image = image / 255.0
+         print("Explaining with Occlusion Sensitivity")
+         explained_img_name = 'TESTNAME.png'
+         explainer = OcclusionSensitivity()
+         data = (image, label)
+         grid = explainer.explain(data, model, label, patch_size=15, colormap=cv2.COLORMAP_TURBO)  #
+         print(grid.shape)
+         explainer.save(grid, ".", explained_img_name)
 #         self.plot_explanations(explained_img_name)
 #         #return grid, explained_img_name
-#         encodedNumpyData = json.dumps(grid, cls=NumpyArrayEncoder)
-#         return encodedNumpyData
+         encodedNumpyData = json.dumps(grid, cls=NumpyArrayEncoder)
+#        return encodedNumpyData
 #
-#     def plot_explanations(self, img_name):
-#         img = plt.imread(img_name)
-#         plt.figure(figsize=(6, 6))
-#         plt.imshow(img)
-#         plt.axis('off')
-#         plt.title('Occlusion Sensitivity')
-#         plt.show()
+     def plot_explanations(self, img_name):
+         img = plt.imread(img_name)
+         plt.figure(figsize=(6, 6))
+         plt.imshow(img)
+         plt.axis('off')
+         plt.title('Occlusion Sensitivity')
+         plt.show()
 
