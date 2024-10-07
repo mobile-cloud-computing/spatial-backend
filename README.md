@@ -107,6 +107,39 @@ http://<remote_server_ip>:1337
 
 The playbook also installs and configures Nginx. If you need to modify Nginx settings, edit the `myconf` file, which is copied to `/etc/nginx/sites-enabled/myconf` on the remote server. 
 
+To access your routes using HTTPS, you need to configure SSL certificates in the `myconf` file. By default, the configuration in myconf uses the following SSL directives:
+
+```nginx
+ssl_certificate /etc/nginx/ssl/example2.pem;
+ssl_certificate_key /etc/nginx/ssl/example2.key;
+```
+**How to Create an SSL Certificate**
+
+1. Generate a Self-Signed SSL Certificate:
+
+If you don't have a certificate from a trusted Certificate Authority (CA), you can create a self-signed certificate using the following command:
+
+```bash
+sudo mkdir -p /etc/nginx/ssl
+sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/nginx/ssl/nginx-selfsigned.key -out /etc/nginx/ssl/nginx-selfsigned.pem
+```
+This command will generate two files:
+- nginx-selfsigned.key: The private key for SSL.
+- nginx-selfsigned.pem: The certificate file.
+
+2. Update the myconf File:
+
+Once you have created the certificate files, update the following lines in your myconf file to match your generated file names:
+
+```nginx
+ssl_certificate /etc/nginx/ssl/nginx-selfsigned.pem;
+ssl_certificate_key /etc/nginx/ssl/nginx-selfsigned.key;
+```
+
+**Note**: You can use any file name or path for your certificates, as long as it matches the paths in the myconf file. If you use custom names, update the ssl_certificate and ssl_certificate_key paths accordingly.
+
+**Configuring Upstreams with respective IPs**
+
 Copy the `nginx.conf` file (from the `Latest Configs` folder in the repo) to the `/etc/nginx` folder on the remote server to configure the NGINX with the latest configurations(Upstreams with respective VM's IP). If you need to modify Nginx settings, edit the `nginx.conf` file.
 
 **Note**: The `nginx.conf` file provided in the `Latest Configs` folder is configured with IP addresses that correspond to specific servers for each service (e.g., SHAP, LIME, and OCCLUSION services). If your setup has these services running on different servers, **you must update these IP addresses** in the `nginx.conf` file to reflect the correct server IPs. For example:
