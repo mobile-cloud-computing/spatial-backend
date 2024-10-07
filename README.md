@@ -169,3 +169,19 @@ http://<remote_server_ip>:8001
    
 - Use docker compose logs <service_name> to view logs of a specific service.
 - Check for port conflicts or missing environment variables.
+
+This tool is open-source and contains the back-end of the SPATIAL Platform. This research is part of SPATIAL project that has received funding from the European Union's Horizon 2020 research and innovation programme under grant agreement No.101021808.
+
+- Ottun, Abdul-Rasheed, et al.  ["The SPATIAL architecture: Design and development experiences from gauging and monitoring the ai inference capabilities of modern applications.."](https://ieeexplore.ieee.org/abstract/document/10630929) IEEE 44th International Conference on Distributed Computing Systems (ICDCS). IEEE, 2024.
+  
+**BibTex**
+```xml
+@inproceedings{ottun2024spatial,
+  title={The SPATIAL architecture: Design and development experiences from gauging and monitoring the ai inference capabilities of modern applications},
+  author={Ottun, Abdul-Rasheed and Marasinghe, Rasinthe and Elemosho, Toluwani and Liyanage, Mohan and Ragab, Mohamad and Bagave, Prachi and Westberg, Marcus and others},
+  booktitle={2024 IEEE 44th International Conference on Distributed Computing Systems (ICDCS)},
+  pages={947--959},
+  year={2024},
+  organization={IEEE}
+}
+```
