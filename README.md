@@ -107,8 +107,40 @@ http://<remote_server_ip>:1337
 
 The playbook also installs and configures Nginx. If you need to modify Nginx settings, edit the `myconf` file, which is copied to `/etc/nginx/sites-enabled/myconf` on the remote server. 
 
-Copy the `nginx.conf` file (from the `Latest Configs` folder in the repo) to the `/etc/nginx` folder on the remote server to configure the NGINX with the latest implementations. If you need to modify Nginx settings, edit the `nginx.conf` file.
+Copy the `nginx.conf` file (from the `Latest Configs` folder in the repo) to the `/etc/nginx` folder on the remote server to configure the NGINX with the latest configurations(Upstreams with respective VM's IP). If you need to modify Nginx settings, edit the `nginx.conf` file.
 
+**Note**: The `nginx.conf` file provided in the `Latest Configs` folder is configured with IP addresses that correspond to specific servers for each service (e.g., SHAP, LIME, and OCCLUSION services). If your setup has these services running on different servers, **you must update these IP addresses** in the `nginx.conf` file to reflect the correct server IPs. For example:
+
+```nginx
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {
+	worker_connections 768;
+	# multi_accept on;
+}
+
+http {
+	  client_body_timeout 600s;
+	  client_header_timeout 600s;
+	  fastcgi_read_timeout 600s;
+	  client_max_body_size 100M;
+
+	   upstream backend_servers_shap {
+		#if you want other SHAP activated - UNCOMMENT 
+	         server 193.40.154.87:8090;
+            #server 193.40.154.160:8090;
+            #server 193.40.155.96:8090;
+	   }
+       upstream backend_servers_lime {
+            server 193.40.154.160:8090;
+       }
+       upstream backend_servers_occlusion {
+            server 193.40.155.96:8090;
+       }
+```
 Restart Nginx to apply any changes:
 
 ```bash
