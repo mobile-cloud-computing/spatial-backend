@@ -157,8 +157,8 @@ http://<remote_server_ip>:8001
 
 1. Connection Issues:
    
--Ensure the IP address and SSH credentials in the inventory file are correct.
--Verify the SSH key (id_rsa) has the correct permissions: chmod 600 id_rsa.
+- Ensure the IP address and SSH credentials in the inventory file are correct.
+- Verify the SSH key (id_rsa) has the correct permissions: chmod 600 id_rsa.
 
 3. Docker or Ansible Errors:
    
