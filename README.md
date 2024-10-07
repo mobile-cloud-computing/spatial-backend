@@ -3,9 +3,9 @@
 This project provides an automated way to deploy Kong (an API gateway) along with its dependencies using Ansible and Docker Compose. The deployment includes the Kong service, a PostgreSQL database, and Konga, a web-based GUI for managing and monitoring Kong.
 
 ## Prerequisites
-**Git**
-**Ansible** installed on your local machine.
-Ensure the remote server **does not** have **Docker** pre-installed, as the playbook will handle Docker setup.
+- **Git**
+- **Ansible** installed on your local machine.
+- Ensure the remote server **does not** have **Docker** pre-installed, as the playbook will handle Docker setup.
 
 ## Setup and Configuration
 
