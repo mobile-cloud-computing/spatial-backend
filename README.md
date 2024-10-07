@@ -129,17 +129,17 @@ http {
 	  client_max_body_size 100M;
 
 	   upstream backend_servers_shap {
-		#if you want other SHAP activated - UNCOMMENT 
+	   #if you want other SHAP activated - UNCOMMENT 
 	         server 193.40.154.87:8090;
-            #server 193.40.154.160:8090;
-            #server 193.40.155.96:8090;
+                 #server 193.40.154.160:8090;
+                 #server 193.40.155.96:8090;
 	   }
-       upstream backend_servers_lime {
-            server 193.40.154.160:8090;
-       }
-       upstream backend_servers_occlusion {
-            server 193.40.155.96:8090;
-       }
+           upstream backend_servers_lime {
+                 server 193.40.154.160:8090;
+           }
+ 	   upstream backend_servers_occlusion {
+                 server 193.40.155.96:8090;
+           }...
 ```
 Restart Nginx to apply any changes:
 
