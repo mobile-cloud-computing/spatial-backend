@@ -109,6 +109,12 @@ The playbook also installs and configures Nginx. If you need to modify Nginx set
 
 Copy the `nginx.conf` file (from the `Latest Configs` folder in the repo) to the `/etc/nginx` folder on the remote server to configure the NGINX with the latest implementations. If you need to modify Nginx settings, edit the `nginx.conf` file.
 
+Restart Nginx to apply any changes:
+
+```bash
+sudo systemctl restart nginx
+```
+
 **Step 8: Restore Kong Configuration Using Konga GUI**
 
 After deploying the Kong services, you can restore your previously saved configuration using the Konga GUI by following these steps:
